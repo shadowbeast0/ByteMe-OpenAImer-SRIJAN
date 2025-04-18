@@ -1,1 +1,1 @@
-https://www.kaggle.com/code/ultronxx/byteme-track1-openaimer
+https://www.kaggle.com/code/chickenpenguin/byteme-track1-openaimer#T-SNE-plot
