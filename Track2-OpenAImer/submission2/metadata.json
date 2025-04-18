@@ -1,0 +1,7 @@
+{
+  "username": "shadowbeast0",
+  "teamname": "ByteMe",
+  "model_format": "pytorch",
+  "model_size_mb": 0.105,
+  "additional_notes": "Compressed Resnet18 with Quantization"
+}
