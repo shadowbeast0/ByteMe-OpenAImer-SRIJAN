@@ -12,11 +12,6 @@ The given Repository consists of the outputs and the link to the notebooks of Tr
 - [Track-1: Supervised Contrastive Learning](#track-1-supervised-contrastive-learning)
 - [Track-2: ResNet18 Compression](#track-2-resnet18-compression)
 - [Results](#results)
-- [Why SupCon?](#why-supervised-contrastive-learning)
-- [Reproducibility Guide](#reproducibility-guide)
-- [Future Work](#future-work)
-- [Environment](#environment)
-- [Notebooks & Outputs](#notebooks--outputs)
 
 ---
 
