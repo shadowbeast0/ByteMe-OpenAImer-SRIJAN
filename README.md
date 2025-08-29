@@ -2,109 +2,105 @@
 
 The given Repository consists of the outputs and the link to the notebooks of Track-1 and Track-2 prelims round of OpenAImer SRIJAN
 
-Track-1: Supervised Contrastive Learning · Track-2: ResNet18 Model Compression
+This repository contains outputs and links to notebooks for the prelims round of OpenAImer SRIJAN, covering:
 
-Repository README distilled from the team’s presentation. 
+Track-1: Supervised Contrastive Learning
 
-Team & Affiliation
+Track-2: ResNet18 Model Compression
+
+Repository content is distilled from our team presentation.
+
+📌 Team & Affiliation
 
 Team ByteMe — BCSE UG’27, Jadavpur University
-Members: Arjeesh Palai · Arko Dasgupta · Sombrata Biswas · Abhirup Pal. 
+Members: Arjeesh Palai · Arko Dasgupta · Sombrata Biswas · Abhirup Pal
 
-TL;DR
+🔍 TL;DR
+✅ Track-1 — Supervised Contrastive Learning
 
-Track-1: Two-stage pipeline using DenseNet201 with Supervised Contrastive (SupCon) pre-training + linear evaluation. Achieved F1 0.9948, Acc 0.9936, Precision 0.9944, Recall 0.9952. Visualizations (t-SNE) show well-separated clusters post contrastive training. Other backbones tried: ResNet50, InceptionV3, InceptionResNetV2, DenseNet169. 
+Pipeline: Two-stage approach
 
-Track-2: Post-training L1 unstructured, weighted pruning (“lottery-ticket style”) + architecture slimming on ResNet18. Result: ~0.38 MB disk, 8.63 ms latency, 52.8% validation accuracy. Motivated layer-sensitive ~50% pruning; future work: FishLeg/second-order pruning variants. 
+Stage 1: SupCon pre-training (DenseNet201 + MLP projection head)
 
-Why Supervised Contrastive Learning?
+Stage 2: Linear evaluation (encoder frozen)
 
-Without contrastive objectives, class boundaries blur; linear classifiers struggle.
+Performance:
 
-SupCon pulls positives (same class) together and pushes all others away via a log-softmax over pairwise similarities; temperature τ ∈ (0,1] scales sharpness. Outcome: compact class clusters → higher accuracy with fewer epochs. 
+F1: 0.9948
 
-Method (Track-1)
-Architecture
+Accuracy: 0.9936
 
-Base encoder: DenseNet201 (used in both stages).
+Precision: 0.9944
 
-Projection head: MLP atop encoder during SupCon pre-training.
+Recall: 0.9952
 
-Linear head: Softmax classifier trained with cross-entropy in evaluation stage (encoder frozen).
+Visualization: t-SNE shows distinct class clusters post contrastive training.
 
-Backprop: Full (encoder + head) during pre-training; classifier-only during evaluation. 
+Other backbones tried: ResNet50, InceptionV3, InceptionResNetV2, DenseNet169.
 
-Pipeline
+✅ Track-2 — ResNet18 Compression
 
-SupCon Pre-training: Image → Encoder → Projection head → SupCon loss.
+Approach:
 
-Linear Evaluation: Freeze encoder → Train linear classifier on encoder features. 
+Post-training L1 unstructured weighted pruning (lottery-ticket style).
 
-Results
+Architecture slimming: Removed Residual Layers 2–4 and Block 2 of Layer 1.
 
-DenseNet201: F1 0.9948, Accuracy 0.9936, Precision 0.9944, Recall 0.9952.
-
-t-SNE: Clear class-wise clustering after SupCon.
-
-Other models evaluated: ResNet50, InceptionV3, InceptionResNetV2, DenseNet169. 
-
-Method (Track-2) — ResNet18 Compression
-What we pruned/compressed
-
-Pruning: L1 unstructured, weighted (post-training; lottery-ticket-style).
-
-Slimming: Removal of Residual Layers 2–4 and the second block of Residual Layer 1 (as per slide schematic). 
-
-Metrics
+Result:
 
 Disk size: ~0.38 MB
 
 Latency: 8.63 ms
 
-Validation accuracy: 52.8% 
+Validation accuracy: 52.8%
 
-Why ~50% pruning?
+Future work: Layer-sensitive pruning, FishLeg/second-order pruning variants.
 
-Preserves critical features in sensitive layers.
+❓ Why Supervised Contrastive Learning?
 
-Good sparsity/utility trade-off; reduces overfitting risk.
+Standard cross-entropy struggles when class boundaries blur.
 
-Efficient compression with minimal drop when done layer-sensitively. 
+SupCon improves representation by pulling positives (same class) closer and pushing negatives apart using a log-softmax over similarities, scaled by temperature (τ ∈ (0,1]).
 
-Scope for Improvement
+Result: Compact clusters → better linear separability → improved accuracy with fewer epochs.
 
-Layer-Sensitive Pruning: Adapt pruning ratios per-layer by impact.
+🛠 Methodology
+Track-1: Architecture & Pipeline
 
-FishLeg / FLS: Learn a compact approximation to the inverse Fisher to get second-order-aware saliency; supports unstructured and 2:4 semi-structured pruning with tensor factorization + preconditioning. 
+Base encoder: DenseNet201
 
-Reproducing (High-Level Guide)
+Projection head: MLP on encoder (SupCon pre-training)
 
-The slides describe the approach and results; wire up your codebase accordingly.
+Linear head: Softmax classifier (evaluation stage, encoder frozen)
 
-Environment
+Training:
 
-Deep learning stack (e.g., PyTorch + torchvision), metric tooling, t-SNE plotting.
+Stage 1: Full backprop (encoder + projection head) with SupCon loss
 
-SupCon Pre-training
+Stage 2: Classifier-only with cross-entropy
 
-Use DenseNet201 encoder + MLP projection head.
+Pipeline:
 
-Train with Supervised Contrastive Loss (temperature τ).
+SupCon Pre-training: Image → Encoder → Projection head → SupCon loss
 
-Save encoder weights.
+Linear Evaluation: Freeze encoder → Train linear classifier
 
-Linear Evaluation
+Track-2: Compression Strategy
 
-Freeze encoder, attach a linear classifier, train with cross-entropy.
+Pruning:
 
-Report F1/Acc/Prec/Rec + t-SNE embeddings.
+L1 unstructured weighted pruning (post-training)
 
-Compression (Track-2)
+Inspired by lottery-ticket hypothesis
 
-Apply L1 unstructured weighted pruning to ResNet18.
+Slimming:
 
-Optionally slim residual layers/blocks per slide schematic.
+Removed Residual Layers 2–4 and Block 2 of Layer 1
 
-Measure model size, latency, validation accuracy.
+Metrics:
 
-Tip: For next iterations, prototype layer-sensitive ratios and evaluate FishLeg-style second-order pruning for better accuracy-at-sparsity
+Disk size: ~0.38 MB
+
+Latency: 8.63 ms
+
+Validation accuracy: 52.8%
